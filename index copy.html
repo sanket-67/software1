@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charmi Restaurant</title>
+    <link rel="stylesheet" href="style copy.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>SHREE GURU RAGHAVENDRA RESTAURENT</h1>
+            <p class="address"> <br> Opposite To Pandari Bus Stand, Behind Gurudwara, Shankar Nagar, Raipur</p>
+            <p class="datetime" id="datetime"></p>
+            <p class="service-type">Dine In</p>
+            <hr class="divider">
+        </div>
+
+        <div class="details">
+            <div class="table-info">
+                <p class="table" id="table-number"></p>
+                <p class="user">User: OBShivraj</p>
+            </div>
+            <hr class="divider">
+        </div>
+
+        <div class="item-header">
+            <div class="item">Item</div>
+            <div>Qty</div>
+            <div>Rate</div>
+            <div>Total</div>
+        </div>
+
+        <div id="item-list">
+        </div>
+
+        <hr class="divider">
+
+        <div class="bill">
+            <div class="subtotal" id="subtotal">Subtotal: Rs 00.00</div>
+            <div class="total-quantity">Total Qty: <span id="total-quantity">0</span></div>
+            <div class="grand-total" id="grand-total">Grand Total: Rs 00.00</div>
+        </div>
+
+        <hr class="divider">
+
+    </div>
+
+    <form id="form1">
+        <label for="menuSelect">Select an item:</label>
+        <select id="menuSelect" required>
+            <option value="" disabled selected>Select an item</option>
+        </select>
+        <br><br>
+        <label for="qty">Enter the quantity:</label><br>
+        <input type="number" id="qty" min="1" value="1" required><br><br>
+        <label for="customDate">Custom Date (optional):</label><br>
+        <input type="date" id="customDate"><br><br>
+        <label for="customTime">Custom Time (optional):</label><br>
+        <input type="time" id="customTime"><br><br>
+        <input type="submit" id="submit" value="Add Item">
+    </form>
+
+    <script>
+        const menuItems = [
+            { name: 'Steam Rice', price: 79 },
+            { name: 'Butter Roti', price: 15 },
+            { name: 'Lemon Tea', price: 25 },
+            { name: 'Hot Tea', price: 29 },
+            { name: 'Masala Tea', price: 49 },
+            { name: 'Gud Ki Chai', price: 49 },
+            { name: 'Mint & Lime Ice-Tea', price: 69 },
+            { name: 'Mango Mint Ice-Tea', price: 69 },
+            { name: 'Lemon Honey Ice-Tea', price: 79 },
+            { name: 'Strawberry Mint Ice-Tea', price: 79 },
+            { name: 'Orange Mint Ice-Tea', price: 79 },
+            { name: 'Black Coffee', price: 29 },
+            { name: 'Hot Coffee', price: 39 },
+            { name: 'Cold Coffee', price: 79 },
+            { name: 'Cold Coffee With Ice-Cream', price: 99 },
+            { name: 'Milk Shake', price: 89 },
+            { name: 'Vanilla Milk Shake', price: 79 },
+            { name: 'Strawberry Milk Shake', price: 89 },
+            { name: 'Oreo Cookies Shake', price: 89 },
+            { name: 'Chocolate Milk Shake', price: 99 },
+            { name: 'Kit-Kat Bar Shake', price: 109 },
+            { name: 'Veg Manchow Soup', price: 89 },
+            { name: 'Hot & Sour Soup', price: 99 },
+            { name: 'Tomato Soup', price: 79 },
+            { name: 'Sweet Corn Soup', price: 89 },
+            { name: 'Lemon Coriander Soup', price: 79 },
+            { name: 'Veg Chowmein', price: 99 },
+            { name: 'Veg Hakka Noodles', price: 119 },
+            { name: 'Veg Manchurian', price: 149 },
+            { name: 'Paneer Chilly', price: 149 },
+            { name: 'Paneer 65', price: 159 },
+            { name: 'Veg Crispy', price: 149 },
+            { name: 'Crunchy Veg', price: 159 },
+            { name: 'Lovely Corn', price: 149 },
+            { name: 'Veg Spring Roll', price: 169 },
+            { name: 'Chana Chilly', price: 129 },
+            { name: 'Chana Roast', price: 99 },
+            { name: 'Finger Chips', price: 89 },
+            { name: 'Peanut Masala', price: 89 },
+            { name: 'Special Guru Raghavendra Veg Delight', price: 159 },
+            { name: 'Plain Dosa', price: 59 },
+            { name: 'Onion Dosa', price: 69 },
+            { name: 'Masala Dosa', price: 69 },
+            { name: 'Rava Dosa', price: 59 },
+            { name: 'Rava Onion Dosa', price: 69 },
+            { name: 'Rava Masala Dosa', price: 69 },
+            { name: 'Spicy Dosa', price: 69 },
+            { name: 'Set Dosa', price: 99 },
+            { name: 'Paneer Butter Masala Dosa', price: 119 },
+            { name: 'Oats Dosa', price: 119 },
+            { name: '70mm Dosa', price: 149 },
+            { name: 'Idli (3 Pcs)', price: 49 },
+            { name: 'Ghee Idli', price: 69 },
+            { name: 'Idli Fry', price: 49 },
+            { name: 'Sambar Vada', price: 49 },
+            { name: 'Onion Bonda', price: 49 },
+            { name: 'Mysore Bonda', price: 49 },
+            { name: 'Poori', price: 49 },
+            { name: 'Aloo Paratha', price: 49 },
+            { name: 'Punugulu', price: 39 },
+            { name: 'Masala Vada', price: 39 },
+            { name: 'Mirchi Bhaji', price: 39 },
+            { name: 'Onion Pakoda', price: 49 },
+            { name: 'Veg Pakoda', price: 59 },
+            { name: 'Aloo Bhaji', price: 39 },
+            { name: 'Khela Bhaji', price: 39 },
+            { name: 'Papad Fry', price: 19 },
+            { name: 'Masala Papad', price: 29 },
+            { name: 'Green Salad', price: 59 },
+            { name: 'Onion Salad', price: 29 },
+            { name: 'Veg Raita', price: 39 },
+            { name: 'Boondi Raita', price: 39 },
+            { name: 'Pineapple Raita', price: 69 },
+            { name: 'Jeera Rice', price: 89 },
+            { name: 'Onion Tomato Rice', price: 99 },
+            { name: 'Lemon Rice', price: 99 },
+            { name: 'Masala Khichdi', price: 119 },
+            { name: 'Dal Khichdi', price: 129 },
+            { name: 'Veg Pulao', price: 129 },
+            { name: 'Veg Biryani', price: 139 },
+            { name: 'Kashmiri Pulao', price: 159 },
+            { name: 'Tawa Roti', price: 12 },
+            { name: 'Dal Fry', price: 99 },
+            { name: 'Dal Tadka', price: 119 },
+            { name: 'Dal Makhani', price: 109 },
+            { name: 'Dal Jeera', price: 99 },
+            { name: 'Leshuni Yellow Dal', price: 109 },
+            { name: 'Mix Veg', price: 129 },
+            { name: 'Veg Kadai', price: 129 },
+            { name: 'Veg Kolhapuri', price: 129 },
+            { name: 'Veg Handi', price: 129 },
+            { name: 'Veg Kofta', price: 129 },
+            { name: 'Veg Jalfrezi', price: 129 },
+            { name: 'Aloo Mutter', price: 119 },
+            { name: 'Palak Paneer', price: 139 },
+            { name: 'Paneer Do Pyaza', price: 139 },
+            { name: 'Paneer Kadai', price: 139 },
+            { name: 'Paneer Masala', price: 139 },
+            { name: 'Paneer Punjabi Tadka', price: 139 },
+            { name: 'Paneer Para', price: 139 },
+            { name: 'Paneer Bhurji', price: 149 },
+            { name: 'Paneer Mustard Masala', price: 149 },
+            { name: 'Malai Kofta', price: 159 },
+            { name: 'Shahi Paneer', price: 169 },
+            { name: 'Cheese Corn Sandwich', price: 59 },
+            { name: 'Mexican Sandwich', price: 69 },
+            { name: 'Veg Cheese Sandwich', price: 89 },
+            { name: 'Tandoori Paneer Sandwich', price: 89 },
+            { name: 'Special Sandwich', price: 99 },
+            { name: 'White Sauce Penne Pasta', price: 129 },
+            { name: 'Cheese Cream Penne Pasta', price: 129 },
+            { name: 'Red Sauce Penne Pasta', price: 139 },
+            { name: 'Arrabbiata Penne Pasta', price: 139 },
+            { name: 'Mexican Penne Pasta', price: 139 },
+            { name: 'Indian Masala Maggi', price: 79 },
+            { name: 'Mexican Maggi', price: 79 },
+            { name: 'Double Masala Maggi', price: 89 },
+            { name: 'Vegetable Masala Maggi', price: 99 },
+            { name: 'Punjabi Tadka Maggi', price: 99 },
+            { name: 'Spicy Maggi', price: 99 },
+            { name: 'Cheese Burger', price: 59 },
+            { name: 'Schezwan Burger', price: 69 },
+            { name: 'Paneer Burger', price: 89 },
+            { name: 'Special Burger', price: 99 },
+        ];
+
+        let btn = document.getElementById("submit");
+        let itemList = document.getElementById("item-list");
+        let menuSelect = document.getElementById('menuSelect');
+        let customDateInput = document.getElementById('customDate');
+        let customTimeInput = document.getElementById('customTime');
+
+        // Populate menu select
+        menuItems.forEach(item => {
+            let option = document.createElement('option');
+            option.value = item.name;
+            option.textContent = `${item.name} - Rs ${item.price}`;
+            menuSelect.appendChild(option);
+        });
+
+        btn.addEventListener("click", function(e) {
+            e.preventDefault();
+            
+            let selectedItem = menuSelect.options[menuSelect.selectedIndex].text;
+            let qty = document.getElementById("qty").value;
+            let itemName = selectedItem.split(' - ')[0];
+            let rate = menuItems.find(item => item.name === itemName).price;
+            let amount = rate * qty;
+
+            let div = document.createElement("div");
+            div.className = "item";
+
+            let div1 = document.createElement("div");
+            div1.className = "item-name";
+            div1.innerText = itemName;
+
+            let item1 = document.createElement("div");
+            item1.className = "quantity";
+            item1.innerText = qty;
+
+            let qty1 = document.createElement("div");
+            qty1.className = "rate";
+            qty1.innerText = `${rate}.00`;
+
+            let amo1 = document.createElement("div");
+            amo1.className = "total";
+            amo1.innerText = `${amount}.00`;
+
+            div.appendChild(div1);
+            div.appendChild(item1);
+            div.appendChild(qty1);
+            div.appendChild(amo1);
+
+            itemList.appendChild(div);
+
+            updateTotals();
+
+            // Reset form
+            menuSelect.value = "";
+            document.getElementById("qty").value = "1";
+        });
+
+        function updateTotals() {
+            let totals = document.querySelectorAll(".total");
+            let quantities = document.querySelectorAll(".quantity");
+            let sum = 0;
+            let totalQty = 0;
+
+            for (let i = 0; i < totals.length; i++) {
+                sum += parseFloat(totals[i].innerText);
+                totalQty += parseInt(quantities[i].innerText);
+            }
+
+            let subtotal = document.querySelector(".subtotal");
+            let grandTotal = document.querySelector(".grand-total");
+            let totalQuantity = document.getElementById("total-quantity");
+
+            subtotal.innerText = `Subtotal: Rs ${sum.toFixed(2)}`;
+            grandTotal.innerText = `Grand Total: Rs ${sum.toFixed(2)}`;
+            totalQuantity.innerText = totalQty;
+        }
+
+        function updateDateTime() {
+            let customDate = customDateInput.value;
+            let customTime = customTimeInput.value;
+            
+            let dateTime;
+            if (customDate && customTime) {
+                dateTime = new Date(`${customDate}T${customTime}`);
+            } else {
+                dateTime = new Date();
+            }
+
+            let formattedDateTime = dateTime.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+
+            document.getElementById('datetime').innerText = formattedDateTime;
+        }
+
+        // Initial date-time update and table number setting
+        updateDateTime();
+        let randomNumber = Math.floor(Math.random() * 10) + 1;
+        document.querySelector('.table').innerText = `Table: Table ${randomNumber}`;
+
+        // Update date-time when custom inputs change
+        customDateInput.addEventListener('change', updateDateTime);
+        customTimeInput.addEventListener('change', updateDateTime);
+    </script>
+</body>
+
+</html>
